@@ -1,0 +1,30 @@
+{
+  "name": "schwiftyy-cc",
+  "version": "0.1.0",
+  "description": "A Rick & Morty-style AI companion for Claude Code that teaches vibe coders while building alongside them",
+  "license": "MIT",
+  "bin": {
+    "schwiftyy-cc": "bin/install.js"
+  },
+  "files": [
+    "bin/",
+    "commands/",
+    "agents/",
+    "rules/",
+    "schwiftyy/"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "claude-code",
+    "claude",
+    "ai",
+    "vibe-coding",
+    "skill"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schwiftyy/schwiftyy-cc"
+  }
+}

@@ -50,7 +50,11 @@ Schwiftyy ships in 7 phases. Phase 1 builds the installable npm package scaffold
   3. Schwiftyy acknowledges milestone moments (first file created, first error fixed) with a character-appropriate reaction
   4. `~/.claude/rules/schwiftyy-identity.md` is installed and the personality persists across Claude Code sessions without re-invoking `/schwiftyy`
   5. User can switch between Chill mode and Pro mode within a session
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [x] 03-01-PLAN.md — Audit and finalize `rules/schwiftyy-identity.md` (CHAR-01, CHAR-04) + append Tone Mode hand-off
+- [x] 03-02-PLAN.md — Add CHAR-02 post-code explanation + CHAR-03 milestone blocks to build, optimize, teach
+- [x] 03-03-PLAN.md — Add CHAR-05 Chill/Pro toggle to all six command files + human end-to-end verification
 
 ### Phase 4: Build & Optimize Modes
 **Goal**: Users can describe what they want to build and receive working code with explanations, and can point Schwiftyy at an existing project to get prioritized fixes
@@ -105,7 +109,7 @@ Schwiftyy ships in 7 phases. Phase 1 builds the installable npm package scaffold
 |-------|----------------|--------|-----------|
 | 1. Package Scaffold | 0/TBD | Not started | - |
 | 2. Portal & Entry Command | 0/TBD | Not started | - |
-| 3. Character & Identity | 0/TBD | Not started | - |
+| 3. Character & Identity | 0/3 | Not started | - |
 | 4. Build & Optimize Modes | 0/TBD | Not started | - |
 | 5. Teach & Chat Modes | 0/TBD | Not started | - |
 | 6. Memory System | 0/TBD | Not started | - |

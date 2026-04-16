@@ -160,7 +160,7 @@ Explicitly deferred. Not planned, not partially built.
 | CHAR-02 | Phase 3 | Pending |
 | CHAR-03 | Phase 3 | Pending |
 | CHAR-04 | Phase 3 | Pending |
-| CHAR-05 | Phase 3 | Pending |
+| CHAR-05 | Phase 3 | Complete |
 | CMD-02 | Phase 4 | Pending |
 | CMD-03 | Phase 4 | Pending |
 | BUILD-01 | Phase 4 | Pending |

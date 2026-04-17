@@ -11,8 +11,8 @@ Schwiftyy ships in 7 phases. Phase 1 builds the installable npm package scaffold
 - [ ] **Phase 3: Character & Identity** - Schwiftyy personality locked in, identity rule file installed, tone calibration implemented
 - [ ] **Phase 4: Build & Optimize Modes** - `/schwiftyy:build` and `/schwiftyy:optimize` fully functional with teaching explanations
 - [ ] **Phase 5: Teach & Chat Modes** - `/schwiftyy:teach` and `/schwiftyy:chat` functional, skill-level-aware
-- [ ] **Phase 6: Memory System** - Two-layer memory (per-project + global), `/schwiftyy:memory` command, session continuity
-- [ ] **Phase 7: npm Release Polish** - Package hardened, frontmatter validated, thin-command pattern enforced, published to npm
+- [x] **Phase 6: Memory System** - Two-layer memory (per-project + global), `/schwiftyy:memory` command, session continuity
+- [x] **Phase 7: npm Release Polish** - Package hardened, frontmatter validated, thin-command pattern enforced, published to npm
 
 ## Phase Details
 
@@ -66,7 +66,11 @@ Plans:
   3. Every code block is followed by a Schwiftyy explanation in plain English — no silent code drops
   4. Build session ends with a "what was built" summary and a specific next action suggestion
   5. `/schwiftyy:optimize` scans project files and returns issues ordered by impact, each with a fix and a reason
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [x] 04-01-PLAN.md — Add stack detection (BUILD-02) + session-end summary (BUILD-04) to build.md
+- [x] 04-02-PLAN.md — Add pre-change announcement (OPT-04) to optimize.md
+- [x] 04-03-PLAN.md — Update planning docs + verify all 11 requirements satisfied
 
 ### Phase 5: Teach & Chat Modes
 **Goal**: Users can learn at their own pace through guided building, and have freeform conversations with Schwiftyy that stay project-aware
@@ -77,7 +81,11 @@ Plans:
   2. Explanations use zero assumed knowledge: analogies, plain English, no jargon without translation
   3. Schwiftyy does not re-explain a concept already covered in a previous session (memory-aware teaching)
   4. `/schwiftyy:chat` responds in Schwiftyy's voice on any topic with project context loaded — feels like talking to someone who knows your project
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [x] 05-01-PLAN.md — Add skill level detection (TEACH-02) + taught-concept tracking (TEACH-04) to teach.md
+- [x] 05-02-PLAN.md — Add explicit two-layer memory loading (CHAT-02) to chat.md
+- [x] 05-03-PLAN.md — Update planning docs + verify all 8 requirements satisfied
 
 ### Phase 6: Memory System
 **Goal**: Schwiftyy remembers every project it touches and every user it works with — sessions resume exactly where they left off
@@ -90,7 +98,11 @@ Plans:
   4. Per-project memory file never exceeds 80 lines; rotation to `memory-archive.md` happens automatically
   5. `/schwiftyy:memory` lets user read both memory layers and edit or clear entries
   6. Global memory at `~/.claude/schwiftyy/memory/global.md` accumulates user profile and cross-project patterns across sessions
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [x] 06-01-PLAN.md — Memory file structure + installer + first-run onboarding (MEM-01, MEM-02, MEM-07, MEM-10)
+- [x] 06-02-PLAN.md — Write triggers + rotation in all mode commands (MEM-03, MEM-04, MEM-05, MEM-06)
+- [x] 06-03-PLAN.md — /schwiftyy:memory command rewrite + ROADMAP update (MEM-08, MEM-09, CMD-06)
 
 ### Phase 7: npm Release Polish
 **Goal**: The package is ready for public npm publish — all command files validated, thin-command pattern enforced, installer hardened
@@ -101,7 +113,10 @@ Plans:
   2. All heavy workflow logic lives in `~/.claude/schwiftyy/workflows/*.md` files — command files are thin stubs that reference workflows
   3. A clean install on a machine that has never had Schwiftyy produces a working `/schwiftyy` invocation with no manual steps
   4. Package is published to npm as `schwiftyy-cc` and `npx schwiftyy-cc@latest install` resolves from the registry
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [x] 07-01-PLAN.md — Frontmatter audit + thin-command pattern: extract 6 workflows, rewrite 6 command stubs (PKG-06, PKG-07) — Ultron
+- [ ] 07-02-PLAN.md — install.js hardening + .npmignore + npm publish workflow (PKG-01 through PKG-05) — Jarvis
 
 ## Progress
 
@@ -110,7 +125,7 @@ Plans:
 | 1. Package Scaffold | 0/TBD | Not started | - |
 | 2. Portal & Entry Command | 0/TBD | Not started | - |
 | 3. Character & Identity | 0/3 | Not started | - |
-| 4. Build & Optimize Modes | 0/TBD | Not started | - |
-| 5. Teach & Chat Modes | 0/TBD | Not started | - |
-| 6. Memory System | 0/TBD | Not started | - |
-| 7. npm Release Polish | 0/TBD | Not started | - |
+| 4. Build & Optimize Modes | 3/3 | Complete | 2026-04-16 |
+| 5. Teach & Chat Modes | 3/3 | Complete | 2026-04-16 |
+| 6. Memory System | 3/3 | Complete | 2026-04-17 |
+| 7. npm Release Polish | 2/2 | Complete | 2026-04-17 |

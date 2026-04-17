@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "A Rick & Morty-style AI companion for Claude Code that teaches vibe coders while building alongside them",
   "license": "MIT",
+  "main": "bin/install.js",
   "bin": {
     "schwiftyy-cc": "bin/install.js"
   },
@@ -13,6 +14,9 @@
     "rules/",
     "schwiftyy/"
   ],
+  "scripts": {
+    "prepublishOnly": "node bin/install.js --dry-run"
+  },
   "engines": {
     "node": ">=18.0.0"
   },

@@ -12,7 +12,7 @@ There are two ways to install. Pick one, not both.
 | Needs Node.js | No | Yes, 18+ |
 | Updates | `/plugin` handles it | Re-run the install line |
 | Start command | `/schwiftyy:portal` | `/schwiftyy` (or `/schwiftyy:portal`) |
-| Memory lives in | Claude Code's plugin data folder | `<config>/schwiftyy/memory/` |
+| Memory lives in | `~/.schwiftyy/memory/` | `~/.schwiftyy/memory/` |
 
 ---
 
@@ -67,8 +67,10 @@ Then in Claude Code:
 |---|---|
 | `<config>/commands/schwiftyy.md` | `/schwiftyy` |
 | `<config>/commands/schwiftyy/*.md` | `/schwiftyy:build`, `/schwiftyy:teach`, … |
-| `<config>/schwiftyy/` | Identity, workflows, the portal, `VERSION` |
-| `<config>/schwiftyy/memory/` | Your global memory (created empty; never overwritten) |
+| `<config>/schwiftyy/` | Identity, workflows, the portal, the memory hook, `VERSION` |
+| `<config>/settings.json` | One `PreToolUse` hook entry so memory saves without prompts. Everything else in the file is left alone, and uninstall removes only that entry |
+
+Your memory lives in `~/.schwiftyy/memory/`, outside the config folder. The installer never overwrites it.
 
 `<config>` is `~/.claude`, or whatever `CLAUDE_CONFIG_DIR` is set to.
 
@@ -103,7 +105,7 @@ If you move from npm to the plugin, uninstall the npm copy first so you don't ge
 npx schwiftyy-cc@latest uninstall
 ```
 
-Your old global memory stays in `~/.claude/schwiftyy/memory/`. The plugin keeps its own, so copy `profile.md` and `global.md` across if you want him to remember you.
+Since 0.2.1, both install methods share the same memory in `~/.schwiftyy/memory/`, so switching keeps everything he knows about you. Re-running the npm installer moves memory from the old `<config>/schwiftyy/memory/` location automatically.
 
 ---
 

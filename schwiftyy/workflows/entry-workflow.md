@@ -1,6 +1,6 @@
 # Entry Workflow
 
-Runs after memory-init.md completes on every /schwiftyy invocation.
+Runs on every /schwiftyy invocation.
 
 ## Step 1 — Portal Animation
 
@@ -10,7 +10,13 @@ node "$SCHWIFTYY_HOME/portal.js"
 ```
 The script prints the opening line — do not repeat it.
 
-## Step 2 — Route or Menu
+Play the portal first, before any question or memory read, so the entrance lands even on a first run.
+
+## Step 2 — Memory Setup
+
+Follow `$SCHWIFTYY_HOME/workflows/memory-init.md`. Do not continue until it completes.
+
+## Step 3 — Route or Menu
 
 If $ARGUMENTS is non-empty: skip menu, route directly to /schwiftyy:$ARGUMENTS.
 

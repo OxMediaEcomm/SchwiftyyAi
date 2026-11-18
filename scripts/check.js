@@ -60,21 +60,68 @@ if (!fs.existsSync(path.join(ROOT, 'ollama/Modelfile')) || read('ollama/Modelfil
   fail('ollama/Modelfile is stale: run `npm run build:modelfile`');
 }
 
-// 6. A real install into a throwaway config dir leaves no unresolved plugin variables.
+// 6. The memory hook allows Schwiftyy's own memory files and nothing else.
+const hooks = JSON.parse(read('hooks/hooks.json'));
+const hookArgs = hooks.hooks?.PreToolUse?.[0]?.hooks?.[0]?.args || [];
+if (hookArgs[0] !== '${CLAUDE_PLUGIN_ROOT}/schwiftyy/memory-access.js') fail('hooks/hooks.json must run schwiftyy/memory-access.js');
+const { decide } = require('../schwiftyy/memory-access');
+const home = os.homedir();
+const proj = path.join(os.tmpdir(), 'proj');
+const hookCases = [
+  ['~/.schwiftyy/memory/profile.md', true],
+  [path.join(home, '.schwiftyy', 'memory', 'global.md'), true],
+  [path.join(proj, '.schwiftyy', 'memory.md'), true],
+  ['.schwiftyy/memory.md', true],
+  [path.join(proj, '.gitignore'), false],
+  [path.join(proj, 'index.html'), false],
+  [path.join(proj, '.schwiftyy', '..', 'secrets.env'), false],
+  [path.join(home, '.schwiftyyEVIL', 'x.md'), false],
+  [path.join(home, '.ssh', 'id_rsa'), false],
+];
+for (const [file, want] of hookCases) {
+  if (!!decide({ cwd: proj, tool_input: { file_path: file } }) !== want) fail(`memory hook: ${file} should be ${want ? 'allowed' : 'left alone'}`);
+}
+
+// 7. A real install into a throwaway config dir (and a fake home) round-trips cleanly.
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'schwiftyy-check-'));
 try {
-  const env = { ...process.env, CLAUDE_CONFIG_DIR: tmp };
-  execFileSync(process.execPath, [path.join(ROOT, 'installer/install.js')], { env, stdio: 'pipe' });
-  for (const must of ['commands/schwiftyy.md', 'commands/schwiftyy/build.md', 'schwiftyy/identity.md', 'schwiftyy/portal.js', 'schwiftyy/VERSION']) {
-    if (!fs.existsSync(path.join(tmp, must))) fail(`install: expected ${must}`);
+  const cfg = path.join(tmp, 'cfg');
+  const fakeHome = path.join(tmp, 'home');
+  const env = { ...process.env, CLAUDE_CONFIG_DIR: cfg, HOME: fakeHome, USERPROFILE: fakeHome };
+  const run = (...a) => execFileSync(process.execPath, [path.join(ROOT, 'installer/install.js'), ...a], { env, stdio: 'pipe' });
+
+  // A 0.2.0-era install: memory inside the config dir, plus a user hook and setting we must keep.
+  fs.mkdirSync(path.join(cfg, 'schwiftyy', 'memory'), { recursive: true });
+  fs.writeFileSync(path.join(cfg, 'schwiftyy', 'memory', 'profile.md'), 'name: Test\n');
+  const userHook = { matcher: 'Bash', hooks: [{ type: 'command', command: 'echo mine' }] };
+  fs.writeFileSync(path.join(cfg, 'settings.json'), JSON.stringify({ theme: 'dark', hooks: { PreToolUse: [userHook] } }));
+
+  run();
+  run(); // re-running must not duplicate the hook
+  for (const must of ['commands/schwiftyy.md', 'commands/schwiftyy/build.md', 'schwiftyy/identity.md', 'schwiftyy/portal.js', 'schwiftyy/memory-access.js', 'schwiftyy/VERSION']) {
+    if (!fs.existsSync(path.join(cfg, must))) fail(`install: expected ${must}`);
   }
+  if (!fs.existsSync(path.join(fakeHome, '.schwiftyy', 'memory', 'profile.md'))) fail('install: legacy memory was not moved to ~/.schwiftyy/memory');
+  if (fs.existsSync(path.join(cfg, 'schwiftyy', 'memory'))) fail('install: legacy memory folder left behind');
+  const settings = JSON.parse(fs.readFileSync(path.join(cfg, 'settings.json'), 'utf8'));
+  const pre = settings.hooks?.PreToolUse || [];
+  const ours = pre.filter((g) => g.hooks.some((h) => (h.args || []).some((a) => a.endsWith('memory-access.js'))));
+  if (ours.length !== 1) fail(`install: expected exactly 1 memory hook in settings.json, found ${ours.length}`);
+  if (settings.theme !== 'dark' || !pre.some((g) => g.matcher === 'Bash')) fail('install: clobbered existing settings.json content');
+
   const installed = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) =>
     e.isDirectory() ? installed(path.join(d, e.name)) : [path.join(d, e.name)]);
-  for (const f of installed(tmp).filter((p) => p.endsWith('.md'))) {
-    if (fs.readFileSync(f, 'utf8').includes('${CLAUDE_PLUGIN_')) fail(`install: unresolved plugin variable in ${path.relative(tmp, f)}`);
+  for (const f of installed(cfg).filter((p) => p.endsWith('.md'))) {
+    if (fs.readFileSync(f, 'utf8').includes('${CLAUDE_PLUGIN_')) fail(`install: unresolved plugin variable in ${path.relative(cfg, f)}`);
   }
-  execFileSync(process.execPath, [path.join(ROOT, 'installer/install.js'), 'uninstall', '--purge'], { env, stdio: 'pipe' });
-  if (fs.existsSync(path.join(tmp, 'commands/schwiftyy')) || fs.existsSync(path.join(tmp, 'schwiftyy'))) fail('uninstall --purge left files behind');
+
+  run('uninstall');
+  if (fs.existsSync(path.join(cfg, 'commands/schwiftyy')) || fs.existsSync(path.join(cfg, 'schwiftyy'))) fail('uninstall left files behind');
+  if (!fs.existsSync(path.join(fakeHome, '.schwiftyy', 'memory', 'profile.md'))) fail('uninstall (no --purge) deleted memory');
+  const after = JSON.parse(fs.readFileSync(path.join(cfg, 'settings.json'), 'utf8'));
+  if (JSON.stringify(after) !== JSON.stringify({ theme: 'dark', hooks: { PreToolUse: [userHook] } })) fail('uninstall: settings.json not restored to the user\'s original');
+  run('uninstall', '--purge');
+  if (fs.existsSync(path.join(fakeHome, '.schwiftyy', 'memory'))) fail('uninstall --purge left memory behind');
 } catch (err) {
   fail(`install/uninstall threw: ${err.stderr?.toString() || err.message}`);
 } finally {

@@ -75,7 +75,7 @@ skill_level: <read from profile.md if exists, else beginner>
 ## What Was Taught
 ```
 
-Then, if the current directory is a git repo (a `.git` folder exists) and `.gitignore` doesn't already list `.schwiftyy/`, append `.schwiftyy/` to `.gitignore` (create the file if missing) and say once: "Added `.schwiftyy/` to your .gitignore — my notes on you stay off GitHub." (MEM-11)
+Then, if the current directory is a git repo (a `.git` folder exists) and `.gitignore` doesn't already list `.schwiftyy/`, ask once: "Want me to add `.schwiftyy/` to your .gitignore? Keeps my notes on you off GitHub." On yes, append `.schwiftyy/` (create `.gitignore` if missing). On no, drop it and don't ask again this session. (MEM-11)
 
 Then continue to menu — no resume prompt.
 

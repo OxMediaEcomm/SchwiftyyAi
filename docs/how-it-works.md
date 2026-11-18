@@ -39,10 +39,10 @@ Each file in [`commands/`](../commands) is a short stub with three parts:
 
    ```markdown
    - `$SCHWIFTYY_HOME` = `${CLAUDE_PLUGIN_ROOT}/schwiftyy`
-   - `$SCHWIFTYY_MEMORY` = `${CLAUDE_PLUGIN_DATA}/memory`
+   - `$SCHWIFTYY_MEMORY` = `~/.schwiftyy/memory`
    ```
 
-   As a plugin, Claude Code fills in `${CLAUDE_PLUGIN_ROOT}` and `${CLAUDE_PLUGIN_DATA}` itself. Through npm, [the installer](../installer/install.js) fills them in when it copies the files. Either way, the same source files work on every machine, with no hardcoded paths. [`scripts/check.js`](../scripts/check.js) fails CI if one ever sneaks in.
+   As a plugin, Claude Code fills in `${CLAUDE_PLUGIN_ROOT}` itself. Through npm, [the installer](../installer/install.js) fills it in when it copies the files. Memory always lives in your home folder, never inside Claude Code's config folder (see ④). Either way, the same source files work on every machine, with no hardcoded paths. [`scripts/check.js`](../scripts/check.js) fails CI if one ever sneaks in.
 3. **A pointer**: "follow `$SCHWIFTYY_HOME/workflows/build-workflow.md`".
 
 | Command | Tools | Why |
@@ -80,11 +80,17 @@ The same file generates the [Ollama Modelfile](../ollama/Modelfile), so local Sc
 | **TEACH-01/03** | Plain English → analogy → "make sense?" → *then* code → line-by-line |
 | **TEACH-04** | Check `What Was Taught` first; never re-teach a concept |
 | **CHAR-03** | Milestone reactions (first file, first bug killed, first thing you wrote yourself), each once per session |
-| **MEM-11** | Add `.schwiftyy/` to your `.gitignore` so his notes on you don't get committed |
+| **MEM-11** | Offer to add `.schwiftyy/` to your `.gitignore` so his notes on you don't get committed |
 
-## ④ Memory
+## ④ Memory, and the one hook
 
-See [memory.md](memory.md).
+Memory is plain Markdown: see [memory.md](memory.md).
+
+A command's `allowed-tools` only covers the reply where you typed the command. Memory gets written later (after onboarding answers, at milestones, at session end), so without help every memory write would stop and ask permission.
+
+[`schwiftyy/memory-access.js`](../schwiftyy/memory-access.js) is a `PreToolUse` hook that approves **Read / Write / Edit inside exactly two folders**: `~/.schwiftyy/` and the current project's `.schwiftyy/`. Anything else, including `.gitignore`, your code and `../` tricks, gets no decision from the hook and goes through Claude Code's normal permission flow. The plugin registers it in [`hooks/hooks.json`](../hooks/hooks.json). The npm installer adds the same entry to your `settings.json` and removes it on uninstall.
+
+Memory lives in your home folder rather than Claude Code's config folder on purpose: Claude Code treats the config folder as sensitive and asks before every write there, and no hook can approve past that.
 
 ## ⑤ The portal
 

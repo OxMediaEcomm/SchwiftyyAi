@@ -20,18 +20,18 @@ flowchart TB
 
 ## Where the files live
 
-| Layer | Plugin install | npm install |
-|---|---|---|
-| Global | `<config>/plugins/data/schwiftyy-schwiftyy/memory/` | `<config>/schwiftyy/memory/` |
-| Project | `<your project>/.schwiftyy/` | same |
+| Layer | Where |
+|---|---|
+| Global | `~/.schwiftyy/memory/`, the same for both install methods and every Claude Code config |
+| Project | `<your project>/.schwiftyy/` |
 
-`<config>` is `~/.claude` unless you set `CLAUDE_CONFIG_DIR`.
+Schwiftyy can read and write these two folders without asking you every time. A small hook approves exactly these paths and nothing else ([how it works](how-it-works.md)). Uninstalling keeps your memory unless you ask to purge it.
 
 ## How it behaves
 
 **First run ever:** he asks three questions, one at a time (your name, beginner/intermediate, what you usually build), and never asks again.
 
-**First run in a project:** he creates `.schwiftyy/memory.md` and, if it's a git repo, adds `.schwiftyy/` to your `.gitignore`.
+**First run in a project:** he creates `.schwiftyy/memory.md` and, if it's a git repo, offers to add `.schwiftyy/` to your `.gitignore`.
 
 **Coming back:**
 

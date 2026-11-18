@@ -235,7 +235,7 @@ PRs welcome, especially new modes, better workflows, more stacks, and better roa
 2. Never hardcode a path. Use `$SCHWIFTYY_HOME` / `$SCHWIFTYY_MEMORY`.
 3. Every behavior change traces to a requirement in [`docs/development/planning/REQUIREMENTS.md`](docs/development/planning/REQUIREMENTS.md).
 4. Don't break character. Don't add "Certainly!".
-5. `npm run check` before you open the PR. CI runs it on Windows, macOS and Linux anyway.
+5. `npm run check` before you open the PR. CI runs it on Windows and Linux anyway (macOS runs after merge).
 
 ---
 

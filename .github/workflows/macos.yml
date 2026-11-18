@@ -1,0 +1,31 @@
+name: macOS
+
+# Kept out of PR checks: GitHub's macOS runners for this repo often sit in the
+# queue until the job is cancelled, which marked PRs red without testing
+# anything. Nothing in Schwiftyy is macOS-specific; ci.yml covers Linux and
+# Windows on every PR. This runs after merges, weekly, or on demand.
+
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: '20 4 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: checks (macos-latest, node ${{ matrix.node }})
+    runs-on: macos-latest
+    continue-on-error: true
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 22]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm run check
+      - run: node schwiftyy/portal.js

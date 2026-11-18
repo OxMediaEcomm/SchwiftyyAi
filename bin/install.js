@@ -60,7 +60,17 @@ function initMemoryDirs() {
   console.log(`  ${DRY_RUN ? '[dry-run] would create' : 'created'}: ${memoryDir}`);
 }
 
+// You weren't supposed to find this. `npx schwiftyy-cc --get-schwifty`
+function getSchwifty() {
+  const { spawnSync } = require('child_process');
+  const anim = path.join(PKG_ROOT, 'commands', 'schwiftyy', 'schwiftyy-animation.js');
+  spawnSync(process.execPath, [anim], { stdio: 'inherit' });
+  console.log('\n  Portal test complete. Nothing was installed. Nothing was harmed.');
+  console.log('  Mostly.\n');
+}
+
 function main() {
+  if (args.includes('--get-schwifty')) return getSchwifty();
   if (DRY_RUN) console.log('\n[dry-run] No files will be written.\n');
   console.log(`\nSchwiftyy v${VERSION} — installing to ${CLAUDE_DIR}\n`);
 

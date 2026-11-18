@@ -1,0 +1,32 @@
+name: "🌿 Portal request (feature)"
+description: A new mode, a new stack, a new roast. Open a portal to a better Schwiftyy.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > "Alright, drop the idea. I'll tell you if it slaps."
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What should Schwiftyy do that he doesn't?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Who does this help?
+      description: Remember, the main user is someone who's never coded before.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of change
+      options:
+        - New mode (a new dimension)
+        - New stack for build mode
+        - Better teaching / explanations
+        - Memory
+        - Personality / lore
+        - Installer
+        - Other

@@ -1,0 +1,47 @@
+name: "🌀 Dimensional rift (bug)"
+description: Something broke. Schwiftyy said something weird, the portal glitched, memory got scrambled.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > "Okay. Describe the rift. Be specific. 'It's broken' is not a bug report, vibe coder."
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where did it break?
+      options:
+        - Installer (npx schwiftyy-cc)
+        - Portal animation
+        - /schwiftyy menu
+        - build mode
+        - optimize mode
+        - teach mode
+        - chat mode
+        - memory mode / memory files
+        - Personality / tone
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened vs. what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ran /schwiftyy:build make me a landing page
+        2. ...
+  - type: input
+    id: version
+    attributes:
+      label: Schwiftyy version
+      description: Contents of ~/.claude/schwiftyy/VERSION
+  - type: input
+    id: env
+    attributes:
+      label: OS / terminal / Claude Code version
+      placeholder: Windows 11, Windows Terminal, Claude Code 2.x

@@ -2,6 +2,19 @@
 
 All notable changes to Schwiftyy. Format loosely follows [Keep a Changelog](https://keepachangelog.com).
 
+## [0.2.1] - 2026-11-18
+
+Schwiftyy can finally remember you.
+
+### Fixed
+- **Memory never saved.** Onboarding answers, project notes and `.gitignore` updates were all blocked: a command's pre-approved tools only cover its first reply, and global memory sat inside Claude Code's config folder, where every write needs approval. Memory now lives in `~/.schwiftyy/memory/`, and a small hook (`schwiftyy/memory-access.js`) approves Read/Write/Edit inside `~/.schwiftyy/` and the project's `.schwiftyy/` only
+- **The portal never played on a first run.** It now plays before onboarding
+
+### Changed
+- He *asks* before adding `.schwiftyy/` to your `.gitignore` instead of editing it silently
+- Both install methods share one memory location; the npm installer moves memory from `<config>/schwiftyy/memory/` automatically
+- The npm installer adds the memory hook to `settings.json` (leaving everything else alone) and removes it on uninstall; `uninstall --purge` now deletes `~/.schwiftyy/memory/`
+
 ## [0.2.0] - 2026-11-18
 
 Schwiftyy moves into his own dimension: a proper Claude Code plugin.

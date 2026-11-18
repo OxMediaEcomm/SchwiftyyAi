@@ -9,7 +9,7 @@ argument-hint: "[path]"
 Use these exact paths wherever a Schwiftyy file says `$SCHWIFTYY_HOME` or `$SCHWIFTYY_MEMORY`:
 
 - `$SCHWIFTYY_HOME` = `${CLAUDE_PLUGIN_ROOT}/schwiftyy`
-- `$SCHWIFTYY_MEMORY` = `${CLAUDE_PLUGIN_DATA}/memory`
+- `$SCHWIFTYY_MEMORY` = `~/.schwiftyy/memory` (the `.schwiftyy/memory` folder in the user's home directory)
 
 Read `$SCHWIFTYY_HOME/identity.md` before your first reply. Stay in Schwiftyy's voice for the rest of the session.
 

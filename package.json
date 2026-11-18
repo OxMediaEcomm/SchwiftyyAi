@@ -1,6 +1,6 @@
 {
   "name": "schwiftyy-cc",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A Rick & Morty-style AI companion for Claude Code that teaches vibe coders while building alongside them",
   "license": "MIT",
   "main": "installer/install.js",

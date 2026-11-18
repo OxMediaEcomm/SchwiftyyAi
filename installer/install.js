@@ -19,6 +19,12 @@ const CONFIG_DIR = path.resolve(process.env.CLAUDE_CONFIG_DIR || path.join(os.ho
 const HOME_DIR = path.join(CONFIG_DIR, 'schwiftyy');
 const CMD_DIR = path.join(CONFIG_DIR, 'commands', 'schwiftyy');
 const ENTRY_CMD = path.join(CONFIG_DIR, 'commands', 'schwiftyy.md');
+const SETTINGS = path.join(CONFIG_DIR, 'settings.json');
+// Memory lives outside the Claude config dir: Claude Code treats writes there
+// as sensitive and prompts every time, even when a hook approves them.
+const MEMORY_DIR = path.join(os.homedir(), '.schwiftyy', 'memory');
+const LEGACY_MEMORY_DIR = path.join(HOME_DIR, 'memory');
+const HOOK_SCRIPT = path.join(HOME_DIR, 'memory-access.js');
 
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
@@ -29,11 +35,9 @@ const USAGE = 'Usage: npx schwiftyy-cc@latest [install | uninstall] [--dry-run] 
 const fwd = (p) => p.split(path.sep).join('/');
 const log = (verb, p) => console.log(`  ${DRY_RUN ? `[dry-run] would ${verb}` : verb}: ${p}`);
 
-// Plugin variables -> concrete paths for a non-plugin install.
+// Plugin variable -> concrete path for a non-plugin install.
 function render(text) {
-  return text
-    .split('${CLAUDE_PLUGIN_ROOT}').join(fwd(CONFIG_DIR))
-    .split('${CLAUDE_PLUGIN_DATA}').join(fwd(HOME_DIR));
+  return text.split('${CLAUDE_PLUGIN_ROOT}').join(fwd(CONFIG_DIR));
 }
 
 function write(dest, content) {
@@ -84,6 +88,70 @@ function cleanLegacy() {
   for (const p of strays) if (fileContains(p, 'Schwiftyy Ai')) remove(p);
 }
 
+// The plugin registers memory-access.js through hooks/hooks.json; an npm
+// install has no plugin, so the same hook goes into settings.json instead.
+const isOurHook = (h) =>
+  (h.args || []).some((a) => String(a).endsWith('memory-access.js')) ||
+  String(h.command || '').includes('memory-access.js');
+
+function editSettings(mutate) {
+  let settings = {};
+  if (fs.existsSync(SETTINGS)) {
+    try {
+      settings = JSON.parse(fs.readFileSync(SETTINGS, 'utf8'));
+    } catch {
+      console.log(`  skip: ${SETTINGS} isn't valid JSON, so the memory hook wasn't updated.`);
+      console.log('        Memory still works; Claude Code will just ask before each memory write.');
+      return;
+    }
+  }
+  if (mutate(settings)) write(SETTINGS, JSON.stringify(settings, null, 2) + '\n');
+}
+
+function stripOurHook(settings) {
+  const groups = settings.hooks && settings.hooks.PreToolUse;
+  if (!Array.isArray(groups)) return false;
+  const kept = groups
+    .map((g) => ({ ...g, hooks: (g.hooks || []).filter((h) => !isOurHook(h)) }))
+    .filter((g) => g.hooks.length > 0);
+  if (kept.length === groups.length && kept.every((g, i) => g.hooks.length === groups[i].hooks.length)) return false;
+  if (kept.length) settings.hooks.PreToolUse = kept;
+  else delete settings.hooks.PreToolUse;
+  if (Object.keys(settings.hooks).length === 0) delete settings.hooks;
+  return true;
+}
+
+function registerHook() {
+  editSettings((settings) => {
+    stripOurHook(settings);
+    settings.hooks = settings.hooks || {};
+    settings.hooks.PreToolUse = settings.hooks.PreToolUse || [];
+    settings.hooks.PreToolUse.push({
+      matcher: 'Read|Write|Edit',
+      hooks: [{ type: 'command', command: 'node', args: [fwd(HOOK_SCRIPT)] }],
+    });
+    return true;
+  });
+}
+
+// <=0.2.0 kept memory in <config>/schwiftyy/memory. Move it; never overwrite.
+function migrateMemory() {
+  if (!fs.existsSync(LEGACY_MEMORY_DIR)) return;
+  for (const name of fs.readdirSync(LEGACY_MEMORY_DIR)) {
+    const dest = path.join(MEMORY_DIR, name);
+    if (fs.existsSync(dest)) {
+      console.log(`  keep: ${dest} already exists; left the old copy in ${LEGACY_MEMORY_DIR}`);
+      continue;
+    }
+    if (!DRY_RUN) {
+      fs.mkdirSync(MEMORY_DIR, { recursive: true });
+      fs.renameSync(path.join(LEGACY_MEMORY_DIR, name), dest);
+    }
+    log('move memory', dest);
+  }
+  if (!DRY_RUN && fs.readdirSync(LEGACY_MEMORY_DIR).length === 0) fs.rmdirSync(LEGACY_MEMORY_DIR);
+}
+
 function install() {
   console.log(`\nSchwiftyy v${VERSION} — installing to ${CONFIG_DIR}\n`);
   cleanLegacy();
@@ -95,10 +163,11 @@ function install() {
     if (name === 'portal.md') write(ENTRY_CMD, content); // plain /schwiftyy
   }
 
-  // Overwrites workflows, identity and portal; never touches memory/.
+  migrateMemory();
+  // Overwrites workflows, identity, portal and hook; memory lives elsewhere.
   copyTree(path.join(PKG_ROOT, 'schwiftyy'), HOME_DIR);
   write(path.join(HOME_DIR, 'VERSION'), VERSION + '\n');
-  if (!DRY_RUN) fs.mkdirSync(path.join(HOME_DIR, 'memory'), { recursive: true });
+  registerHook();
 
   console.log(`\n${DRY_RUN ? '[dry-run] Done. No files were written.' : 'Done. Open Claude Code and run /schwiftyy to get started.'}\n`);
 }
@@ -108,14 +177,11 @@ function uninstall() {
   cleanLegacy();
   remove(CMD_DIR);
   remove(ENTRY_CMD);
-  if (PURGE) {
-    remove(HOME_DIR);
-  } else if (fs.existsSync(HOME_DIR)) {
-    for (const name of fs.readdirSync(HOME_DIR)) {
-      if (name !== 'memory') remove(path.join(HOME_DIR, name));
-    }
-    console.log(`\n  Kept your memory in ${path.join(HOME_DIR, 'memory')} (pass --purge to delete it).`);
-  }
+  editSettings(stripOurHook);
+  migrateMemory(); // an old-layout memory folder must survive removing HOME_DIR
+  remove(HOME_DIR);
+  if (PURGE) remove(MEMORY_DIR);
+  else if (fs.existsSync(MEMORY_DIR)) console.log(`\n  Kept your memory in ${MEMORY_DIR} (pass --purge to delete it).`);
   console.log(`\n${DRY_RUN ? '[dry-run] Done. No files were removed.' : 'Schwiftyy is gone. He says "rude."'}\n`);
 }
 

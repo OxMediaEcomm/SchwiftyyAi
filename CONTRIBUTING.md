@@ -4,15 +4,19 @@
 
 ## How this thing is built
 
-Schwiftyy is plain Markdown instructions plus one zero-dependency installer. There's no build step.
+Schwiftyy is plain Markdown instructions, one zero-dependency installer, and a couple of check scripts. There's no build step. The repo is a Claude Code plugin *and* an npm package, from the same files.
 
 | Layer | Lives in | Rule |
 |---|---|---|
-| Commands | `commands/schwiftyy/*.md` | **Thin.** Frontmatter + "follow this workflow". Nothing else. |
+| Commands | `commands/*.md` | **Thin.** Frontmatter + the paths header + "follow this workflow". |
 | Workflows | `schwiftyy/workflows/*.md` | All mode behavior goes here. |
-| Identity | `rules/schwiftyy-identity.md` | Voice, tone, banned phrases. Changes here affect *every* mode. |
-| Installer | `bin/install.js` | Node built-ins only. No dependencies, ever. |
-| Receipts | `.planning/` | Requirements, research, phase plans. |
+| Identity | `schwiftyy/identity.md` | Voice, tone, banned phrases. Also generates `ollama/Modelfile`. |
+| Installer | `installer/install.js` | npm channel only. Node built-ins only, no dependencies, ever. |
+| Plugin | `.claude-plugin/` | Manifest + marketplace. Version must match `package.json`. |
+| Guardrails | `scripts/check.js` | Runs in CI and before every publish. |
+| Receipts | `docs/development/planning/` | Requirements, research, phase plans. |
+
+See [docs/how-it-works.md](docs/how-it-works.md) for the full picture.
 
 ## Ground rules
 
@@ -22,18 +26,22 @@ Schwiftyy is plain Markdown instructions plus one zero-dependency installer. The
 4. **Stay in character.** No "Certainly!", "Great question!", "I'd be happy to help", or "As an AI..." anywhere Schwiftyy speaks.
 5. **Never fabricate memory.** Anything touching memory must only write what actually happened.
 6. **Respect the 40-column portal.** Animation frames max 40 visible chars per line.
+7. **No hardcoded paths.** Reference Schwiftyy's own files as `$SCHWIFTYY_HOME/...` and memory as `$SCHWIFTYY_MEMORY/...`. `npm run check` fails on anything like `~/.claude`, `C:/` or `/Users/`.
+8. **Changed `identity.md`?** Run `npm run build:modelfile` and commit the result.
+9. **Never `npm publish` by hand.** See [docs/releasing.md](docs/releasing.md).
 
 ## Testing your change
 
 ```bash
-# see exactly what would be installed
-node bin/install.js --dry-run
+# all the guardrails (paths, frontmatter, versions, Modelfile, a real install + uninstall)
+npm run check
 
-# install it for real into your own ~/.claude
-node bin/install.js --force
+# load your working copy as a plugin, no install needed
+claude --plugin-dir .
+# then: /schwiftyy:portal
 
-# then, in Claude Code:
-/schwiftyy
+# or test the npm channel into a throwaway config folder
+CLAUDE_CONFIG_DIR=/tmp/claude-test node installer/install.js
 ```
 
 Run through the mode you changed in a scratch project. Include a short transcript or screenshot in your PR. Portal changes need a GIF or it didn't happen.
@@ -50,9 +58,9 @@ docs(readme): explain memory rotation
 
 ## Adding a new mode (a "dimension")
 
-1. `commands/schwiftyy/<mode>.md`: thin stub with `name`, `description`, `allowed-tools`, `argument-hint`
+1. `commands/<mode>.md`: copy an existing command, keep the paths header, set `description`, `allowed-tools`, `argument-hint`
 2. `schwiftyy/workflows/<mode>-workflow.md`: opening lines, flow, milestone reactions, memory triggers
-3. Add per-mode voice calibration to `rules/schwiftyy-identity.md`
+3. Add per-mode voice calibration to `schwiftyy/identity.md` (then `npm run build:modelfile`)
 4. Add it to the menu + routing in `schwiftyy/workflows/entry-workflow.md`
 5. Add it to the README mode table
 

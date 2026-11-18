@@ -18,8 +18,9 @@
 <br>
 
 [![npm](https://img.shields.io/npm/v/schwiftyy-cc?style=for-the-badge&logo=npm&logoColor=white&color=2fbf3a&labelColor=0b1a10)](https://www.npmjs.com/package/schwiftyy-cc)
-[![Claude Code](https://img.shields.io/badge/Claude_Code-skill-b6ff5a?style=for-the-badge&logo=anthropic&logoColor=white&labelColor=0b1a10)](https://docs.claude.com/en/docs/claude-code)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-b6ff5a?style=for-the-badge&logo=anthropic&logoColor=white&labelColor=0b1a10)](https://docs.claude.com/en/docs/claude-code)
 [![Node](https://img.shields.io/badge/node-%E2%89%A518-9dff3a?style=for-the-badge&logo=node.js&logoColor=white&labelColor=0b1a10)](https://nodejs.org)
+[![CI](https://img.shields.io/github/actions/workflow/status/OxMediaEcomm/SchwiftyyAi/ci.yml?branch=master&style=for-the-badge&label=CI&labelColor=0b1a10&color=2fbf3a)](https://github.com/OxMediaEcomm/SchwiftyyAi/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-7fbf86?style=for-the-badge&labelColor=0b1a10)](LICENSE)
 
 ![dependencies](https://img.shields.io/badge/runtime_deps-0-2fbf3a?style=flat-square&labelColor=0b1a10)
@@ -33,7 +34,7 @@
 He builds websites and apps *with* you, explains every move he makes, remembers where you left off,
 and calls out the slop before it ships.
 
-[**Install**](#-install-in-30-seconds) · [**Modes**](#-pick-your-poison) · [**How the AI works**](#-how-the-ai-actually-works) · [**Memory**](#-the-memory-banks) · [**FAQ**](#-faq) · [**Contributing**](#-contributing)
+[**Install**](#-install) · [**Modes**](#-pick-your-poison) · [**Local / Ollama**](docs/install-ollama.md) · [**How the AI works**](docs/how-it-works.md) · [**Memory**](docs/memory.md) · [**FAQ**](#-faq)
 
 </div>
 
@@ -57,82 +58,39 @@ You heard about vibe coding. You asked an AI to "make me a website." It gave you
 He's built for people who **have never coded before**, or who started vibe coding and keep getting garbage out. If you're a senior engineer, you already have a workflow. Schwiftyy might still roast it.
 
 ---
+## ⚡ Install
 
-## ⚡ Install in 30 seconds
+**You need [Claude Code](https://docs.claude.com/en/docs/claude-code).** That's it. Pick one:
 
-**You need:** [Node.js 18+](https://nodejs.org) and [Claude Code](https://docs.claude.com/en/docs/claude-code).
+### Plugin (recommended): one line, inside Claude Code
+
+```
+/plugin install schwiftyy --marketplace OxMediaEcomm/SchwiftyyAi
+```
+
+Then: **`/schwiftyy:portal`**
+
+### npm: one line, in your terminal (needs Node 18+)
 
 ```bash
 npx schwiftyy-cc@latest install
 ```
 
-Then open Claude Code in any project folder and type:
-
-```
-/schwiftyy
-```
+Then: **`/schwiftyy`**
 
 The portal opens. He drops in. You're off.
 
-<details>
-<summary><b>What the installer actually does</b> (no mystery files, promise)</summary>
-
-<br>
-
-It copies plain Markdown and one JavaScript file into your Claude Code config folder. Nothing runs in the background and there's no telemetry. It has zero dependencies, just Node's built-in `fs`, `path` and `os`.
-
-| From this repo | To | Notes |
-|---|---|---|
-| `commands/schwiftyy/` | `~/.claude/commands/schwiftyy/` | The six slash commands + the portal animation |
-| `rules/` | `~/.claude/rules/` | Schwiftyy's identity file. **Never overwrites** an existing file unless you pass `--force` |
-| `schwiftyy/` | `~/.claude/schwiftyy/` | The workflow "brains" each command follows |
-| *(generated)* | `~/.claude/schwiftyy/VERSION` | So you know what you're running |
-| *(generated)* | `~/.claude/schwiftyy/memory/` | Your global memory lives here |
-
-**Flags**
-
-| Flag | Does |
+| I want to… | Go here |
 |---|---|
-| `--dry-run` | Shows every file it *would* write. Writes nothing |
-| `--force` | Overwrites existing files, including the identity rule. Use this when updating |
-
-</details>
-
-<details>
-<summary><b>Updating</b></summary>
-
-<br>
-
-```bash
-npx schwiftyy-cc@latest install --force
-```
-
-`--force` matters: without it, the installer protects your existing `rules/schwiftyy-identity.md`, so personality updates won't land.
-
-</details>
-
-<details>
-<summary><b>Uninstalling</b> (he'll be sad, but he'll get over it)</summary>
-
-<br>
-
-Delete these:
-
-```
-~/.claude/commands/schwiftyy/
-~/.claude/rules/schwiftyy-identity.md
-~/.claude/schwiftyy/            ← includes your global memory
-```
-
-And in any project you used him in, the `.schwiftyy/` folder.
-
-</details>
+| Install, update, uninstall, use a custom config folder | [docs/install-claude-code.md](docs/install-claude-code.md) |
+| Run him on a **local model** with Ollama, free and offline | [docs/install-ollama.md](docs/install-ollama.md) |
+| Upgrade from 0.1.x | [docs/install-claude-code.md#upgrading-from-01x](docs/install-claude-code.md#upgrading-from-01x) |
 
 ---
 
 ## 🧪 Pick your poison
 
-Run `/schwiftyy` and you get the portal, then the menu:
+Start Schwiftyy and you get the portal, then the menu:
 
 ```text
 Alright, pick your poison:
@@ -144,7 +102,7 @@ Alright, pick your poison:
   [memory]    see what I remember about you
 ```
 
-Or skip the menu and go straight in: `/schwiftyy build`, or call any mode directly.
+Or skip the menu and call a mode directly:
 
 | Command | Energy | What happens |
 |---|---|---|
@@ -152,187 +110,30 @@ Or skip the menu and go straight in: `/schwiftyy build`, or call any mode direct
 | **`/schwiftyy:optimize`** `[path]` | 🔪 Surgical. Blunt. | Scans in impact order: **security → performance → code quality**. For each issue: name it, say why it matters, show the fix, move on. Announces every edit before making it. Ends with what's actually *good* |
 | **`/schwiftyy:teach`** `<topic>` | 🐢 Slow. Patient. | Plain-English concept → weird analogy → "make sense so far?" → *then* code → line-by-line walkthrough. Calibrates depth to your skill level. Won't re-teach what you already learned |
 | **`/schwiftyy:chat`** `<anything>` | 🛋️ Relaxed. Tangents allowed. | Freeform. Loads your project memory so it feels like talking to someone who knows what you're working on. C-420 lore may occur |
-| **`/schwiftyy:memory`** `[show\|clear\|edit]` | 🔮 Stoned oracle. | Reads back both memory layers. Edit or wipe entries, and he always shows you the exact change and asks before writing |
+| **`/schwiftyy:memory`** `[show|clear|edit]` | 🔮 Stoned oracle. | Reads back both memory layers. Edit or wipe entries, and he always shows you the exact change and asks before writing |
 
-### Chill mode vs Pro mode
-
-Say **"pro mode"** at any point and Schwiftyy drops the slang and lore but keeps the bluntness and precision. Say **"chill mode"** to bring him back. It lasts for the session.
-
-> Pro mode is Schwiftyy dialed down. He doesn't turn into a generic assistant, and "Certainly!" is banned in both modes.
-
-### Stack detection
-
-`build` mode never guesses your stack:
-
-```text
-requirements.txt / pyproject.toml / *.py   →  FastAPI + Jinja2
-index.html, no Python                      →  plain HTML/CSS
-nothing / ambiguous                        →  asks you, once
-```
+**Chill mode vs Pro mode:** say **"pro mode"** and he drops the slang and lore but keeps the bluntness and precision. **"chill mode"** brings him back. Pro mode is Schwiftyy dialed down; he doesn't turn into a generic assistant, and "Certainly!" is banned in both modes.
 
 ---
 
-## 🧠 How the AI actually works
+## 🧠 How it works, in 30 seconds
 
-There's no fine-tuned model hiding in here, and no server. **Schwiftyy is Claude** (whatever model your Claude Code is running), shaped by a set of carefully written instruction files. That's the whole trick.
+There's no custom model and no server. **Schwiftyy is Claude** (or whatever model your Claude Code runs), steered by Markdown instructions:
 
-Claude Code lets you install three kinds of plain-text instructions, and Schwiftyy uses all three:
+- **[`commands/`](commands)**: one short file per mode. Each one says which tools that mode may use and which playbook to follow.
+- **[`schwiftyy/identity.md`](schwiftyy/identity.md)**: who he is, how he talks, what he'll never say. Loads only when you call him.
+- **[`schwiftyy/workflows/`](schwiftyy/workflows)**: the playbook for each mode, rule by rule. Plan before building. Explain every code block. Announce every fix. Never re-teach.
+- **Memory**: plain Markdown files, one per project plus one about you. [How memory works →](docs/memory.md)
 
-1. **Slash commands** (`~/.claude/commands/`): what runs when you type `/schwiftyy:build`
-2. **Rules** (`~/.claude/rules/`): instructions Claude Code loads into **every** session
-3. **Reference files** (`~/.claude/schwiftyy/`): files the commands tell Claude to go read
-
-```mermaid
-flowchart LR
-    U([You type<br>/schwiftyy:build]) --> C
-
-    subgraph CMD ["① Thin command · commands/schwiftyy/build.md"]
-        C["frontmatter:<br>allowed-tools, argument-hint<br><br>'follow build-workflow.md'"]
-    end
-
-    C --> W
-    C --> T
-
-    subgraph BRAIN ["② Workflow brains · schwiftyy/workflows/"]
-        W["build-workflow.md<br>stack detection · planning ·<br>explain-every-block · milestones"]
-        T["tone-mode.md<br>chill ⇄ pro"]
-        MW["memory-write.md<br>when & what to remember"]
-    end
-
-    W --> MW
-
-    subgraph ID ["③ Identity · rules/schwiftyy-identity.md"]
-        I["voice · banned phrases ·<br>per-mode energy · mistake-handling"]
-    end
-
-    I -. loaded every session .-> CL
-    W --> CL
-    T --> CL
-    MW --> M[("④ Memory<br>.schwiftyy/memory.md<br>~/.claude/schwiftyy/memory/")]
-    M --> CL
-
-    CL{{Claude}} --> R([Schwiftyy talks,<br>plans, builds, teaches])
-```
-
-### ① Thin commands
-
-Each command file is ~13 lines: frontmatter that pre-approves the tools that mode needs, plus a pointer to a workflow. `chat` only gets read-only tools; `build` and `teach` get the full kit.
-
-```yaml
----
-name: schwiftyy:optimize
-description: Scan your project for issues ordered by impact
-allowed-tools: Read, Bash, Glob, Grep
-argument-hint: "[path]"
----
-```
-
-### ② Workflows: the actual brains
-
-Each mode's behavior is spelled out as a precise playbook in `schwiftyy/workflows/`. These aren't vibes, they're rules with IDs you can trace back to [`.planning/REQUIREMENTS.md`](.planning/REQUIREMENTS.md):
-
-- **BUILD-03 / OPT-02**: after every code block or fix, exactly 2–3 sentences: *what it does → why this approach → what you need to know*
-- **OPT-04**: announce `file + section + change` before any edit, and list the changes first for anything over 15 lines
-- **TEACH-04**: check `## What Was Taught` before explaining anything, so you never get the same lesson twice
-- **CHAR-03**: milestone reactions (first file, first bug killed, first thing you wrote yourself). Each fires once and never repeats in a session
-
-### ③ Identity: why he never sounds like a chatbot
-
-[`rules/schwiftyy-identity.md`](rules/schwiftyy-identity.md) defines the character: short punchy sentences, lead with what matters, one roast per bad pattern and then the fix. It also bans a list of phrases outright:
-
-```text
-❌ "I'd be happy to help"    ❌ "Great question!"    ❌ "Certainly!"    ❌ "As an AI..."
-```
-
-Bad code always gets the same four-step treatment: **name it (1 sentence) → why it matters (1 sentence) → show the fix → move on.** He never writes paragraphs about why your code is bad.
-
-### ④ The portal
-
-[`schwiftyy-animation.js`](commands/schwiftyy/schwiftyy-animation.js) is a **zero-dependency** terminal animation: 16 hand-drawn ASCII frames at 80ms (~1.3s), raw ANSI escape codes, sized to fit a 40-column split pane.
-
-- Detects non-TTY output (CI, pipes) and prints static art instead
-- Respects [`NO_COLOR`](https://no-color.org) and `TERM=dumb`
-- If anything throws, it restores your cursor and falls back to the static art, so it never crashes your session
-
-```text
-frames 1–4    a crack in reality          |
-frames 5–8    the portal swirls open    /~~@~~\
-frames 9–12   a silhouette inside       |~(~)~|
-frames 13–16  he steps out. portal closes. leaf.
-```
-
----
-
-## 🔮 The memory banks
-
-Schwiftyy remembers on two layers, both as **plain Markdown files you can open and read**. Nothing goes to the cloud.
-
-```mermaid
-flowchart TB
-    subgraph G ["🌐 Global · ~/.claude/schwiftyy/memory/"]
-        P["profile.md<br>name · skill level · stack"]
-        GL["global.md<br>cross-project patterns · project list"]
-    end
-    subgraph L ["📁 Per project · ./.schwiftyy/"]
-        PM["memory.md<br>Next Action · Last Session ·<br>Open Threads · Decisions · What Was Taught"]
-        AR["memory-archive.md<br>rotated history"]
-    end
-    PM -- "≥ 80 lines → rotate oldest" --> AR
-    PM -. "confirmed across 2+ projects" .-> GL
-```
-
-**First run ever:** he asks three questions, one at a time (your name, beginner/intermediate, what you usually build), and never asks again.
-
-**Coming back to a project:**
-
-> *"Last time you were getting started. Next action was: wire the contact form to the backend. Picking up there?"*
-
-**How memory stays useful instead of bloated:**
-
-- **Writes happen at milestones, not every message:** a plan is made, a decision is locked ("use Supabase"), a concept is taught, the session wraps. If your session dies mid-way you lose at most one step.
-- **`## Next Action` is always exactly one item.** Not a to-do list, just the single most important thing to do next.
-- **`## Last Session` keeps 5 bullets max**, oldest drops off.
-- **Auto-rotation at 80 lines.** Old session notes and lessons move to `memory-archive.md`. `Next Action` and `Open Threads` are never rotated out.
-- **He doesn't make things up.** If it isn't written down, he doesn't "remember" it. Global memory only gets patterns he's confirmed across two or more projects.
-- **You're in charge.** `/schwiftyy:memory` shows every change before writing it and asks for confirmation.
-
-> 💡 `.schwiftyy/` is per-project and personal. Add it to your project's `.gitignore` unless you *want* your teammates reading Schwiftyy's notes on you.
-
----
-
-## 🗺️ What's in the box
-
-```text
-SchwiftyyAi/
-├── bin/
-│   └── install.js                 # zero-dep installer (there may be a hidden flag)
-├── commands/schwiftyy/
-│   ├── schwiftyy.md               # /schwiftyy, the entry point + menu
-│   ├── build.md  optimize.md      # the five modes, each a thin stub
-│   ├── teach.md  chat.md  memory.md
-│   └── schwiftyy-animation.js     # the portal 🌀
-├── rules/
-│   └── schwiftyy-identity.md      # who he is. how he talks. what he'll never say.
-├── schwiftyy/workflows/
-│   ├── entry-workflow.md          # portal → menu → routing
-│   ├── build-workflow.md          # plan → build → explain → hand off
-│   ├── optimize-workflow.md       # security → perf → quality
-│   ├── teach-workflow.md          # concept → analogy → check → code
-│   ├── chat-workflow.md           # vibes, with context
-│   ├── memory-init.md             # onboarding + resume
-│   ├── memory-write.md            # triggers, rotation, rules
-│   └── tone-mode.md               # chill ⇄ pro
-├── assets/banner.svg
-└── .planning/                     # every phase plan, summary & requirement. the receipts.
-```
-
-The whole project was planned and built in public, phase by phase. If you want to see *why* something works the way it does, [`.planning/`](.planning/) has the requirements, research and per-phase plans.
+[Full breakdown with diagrams →](docs/how-it-works.md)
 
 ---
 
 ## 🛣️ Roadmap
 
 - [x] Installable npm package, zero dependencies
+- [x] Claude Code plugin + marketplace, `CLAUDE_CONFIG_DIR` support, CI-only releases
+- [x] Chat-only local Schwiftyy for Ollama
 - [x] Portal animation + `/schwiftyy` entry menu
 - [x] Locked-in character, Chill/Pro tone toggle
 - [x] Build + Optimize modes
@@ -359,19 +160,25 @@ No, and that's the cool part. Schwiftyy is a <i>personality and a playbook</i> r
 <details>
 <summary><b>Does it cost anything?</b></summary>
 <br>
-Schwiftyy is free and MIT-licensed. You need a working Claude Code setup, so whatever plan or API usage you already have.
+Schwiftyy is free and MIT-licensed. You need a working Claude Code setup: a Claude plan, an API key, or a free local model through <a href="docs/install-ollama.md">Ollama</a>.
+</details>
+
+<details>
+<summary><b>Can I run it locally / offline?</b></summary>
+<br>
+Yes, two ways: full Schwiftyy with Claude Code running on an Ollama model, or a chat-only Schwiftyy as a plain Ollama model. <a href="docs/install-ollama.md">Setup for both →</a>
 </details>
 
 <details>
 <summary><b>Will he talk like this in ALL my Claude Code sessions?</b></summary>
 <br>
-Yes, heads up. The identity file installs to <code>~/.claude/rules/</code>, which Claude Code loads in every session, so his voice follows you even when you don't type <code>/schwiftyy</code>. Say "pro mode" to tone it down, or delete <code>~/.claude/rules/schwiftyy-identity.md</code> if you only want him on demand.
+No. Since 0.2.0 he only shows up when you call him. (Up to 0.1.2, the npm install put him in every session; re-running the install fixes that.)
 </details>
 
 <details>
 <summary><b>I use a custom Claude config folder (<code>CLAUDE_CONFIG_DIR</code>). Does it work?</b></summary>
 <br>
-Not yet. The installer and the workflows currently assume <code>~/.claude/</code>. Custom config directory support is on the list.
+Yes. The plugin handles it automatically; for npm, set the variable when you install. <a href="docs/install-claude-code.md#custom-config-folder-claude_config_dir">Details →</a>
 </details>
 
 <details>
@@ -389,7 +196,7 @@ No. This is an independent fan-flavored project with an original character. Schw
 <details>
 <summary><b>Why does he keep saying "vibe coder"?</b></summary>
 <br>
-He doesn't know your name yet. Run <code>/schwiftyy</code> once and tell him.
+He doesn't know your name yet. Start him once and tell him.
 </details>
 
 ---
@@ -425,9 +232,10 @@ He doesn't know your name yet. Run <code>/schwiftyy</code> once and tell him.
 PRs welcome, especially new modes, better workflows, more stacks, and better roasts. Read [CONTRIBUTING.md](CONTRIBUTING.md) first. The short version:
 
 1. Keep command files **thin**. Logic goes in `schwiftyy/workflows/`.
-2. Every behavior change should trace to a requirement in `.planning/REQUIREMENTS.md`.
-3. Don't break character. Don't add "Certainly!".
-4. `node bin/install.js --dry-run` before you open the PR.
+2. Never hardcode a path. Use `$SCHWIFTYY_HOME` / `$SCHWIFTYY_MEMORY`.
+3. Every behavior change traces to a requirement in [`docs/development/planning/REQUIREMENTS.md`](docs/development/planning/REQUIREMENTS.md).
+4. Don't break character. Don't add "Certainly!".
+5. `npm run check` before you open the PR. CI runs it on Windows, macOS and Linux anyway.
 
 ---
 

@@ -1,0 +1,38 @@
+name: Release
+
+# Publishing a GitHub release publishes the same commit to npm.
+# Never `npm publish` from a laptop again — see docs/releasing.md.
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write # npm trusted publishing + provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Trusted publishing needs npm 11.5.1+
+        run: npm install -g npm@latest
+      - name: Tag must match package.json and plugin.json
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG=$(node -p "require('./package.json').version")
+          PLUGIN=$(node -p "require('./.claude-plugin/plugin.json').version")
+          if [ "$TAG" != "$PKG" ] || [ "$TAG" != "$PLUGIN" ]; then
+            echo "::error::release tag v$TAG but package.json=$PKG plugin.json=$PLUGIN"
+            exit 1
+          fi
+      - run: npm run check
+      - run: npm publish --provenance --access public
+        env:
+          # Only used if trusted publishing isn't configured on npmjs.com yet.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

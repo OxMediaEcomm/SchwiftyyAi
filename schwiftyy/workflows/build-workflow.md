@@ -58,7 +58,7 @@ Keep it tight. Handoff, not recap.
 
 ## Memory Writes
 
-Follow `~/.claude/schwiftyy/workflows/memory-write.md`. Triggers in this mode:
+Follow `$SCHWIFTYY_HOME/workflows/memory-write.md`. Triggers in this mode:
 - Architecture plan produced → write plan summary to `## Decisions Made`, update `phase` in frontmatter
 - First file created this session → update `last_session` in frontmatter
 - User makes a stack/architecture decision → append to `## Decisions Made`

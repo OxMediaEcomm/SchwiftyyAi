@@ -1,0 +1,20 @@
+{
+  "name": "schwiftyy",
+  "displayName": "Schwiftyy",
+  "version": "0.2.0",
+  "description": "A Rick & Morty-flavored vibe-coding companion: builds with you, explains every move, remembers where you left off, and roasts the slop.",
+  "author": {
+    "name": "Diyon Clark",
+    "url": "https://github.com/OxMediaEcomm"
+  },
+  "homepage": "https://github.com/OxMediaEcomm/SchwiftyyAi#readme",
+  "repository": "https://github.com/OxMediaEcomm/SchwiftyyAi",
+  "license": "MIT",
+  "keywords": [
+    "vibe-coding",
+    "teaching",
+    "beginners",
+    "memory",
+    "personality"
+  ]
+}

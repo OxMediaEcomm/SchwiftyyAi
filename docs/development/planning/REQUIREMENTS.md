@@ -97,6 +97,7 @@ These are what make Schwiftyy worth installing. Every v1 requirement maps to a p
 | MEM-08 | On every `/schwiftyy` invocation, project memory is read first and `<next_action>` is surfaced to the user |
 | MEM-09 | Memory file surfaced to user explicitly: Schwiftyy says "I remember you were building X" — memory is visible, not hidden |
 | MEM-10 | `/schwiftyy:memory` command lets user view and edit both memory layers |
+| MEM-11 | First project session adds `.schwiftyy/` to the project `.gitignore` when the project is a git repo |
 
 ### npm Package / Installer
 

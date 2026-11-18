@@ -43,7 +43,7 @@ If line count >= 80:
 
 ## Global Memory Updates
 
-Update `~/.claude/schwiftyy/memory/global.md` only when:
+Update `$SCHWIFTYY_MEMORY/global.md` only when:
 - A pattern is confirmed across 2+ projects (add to `## Cross-Project Patterns`)
 - A new project is completed (add to `## Projects` list)
 - User's skill level clearly advances (update `skill_level` in frontmatter)

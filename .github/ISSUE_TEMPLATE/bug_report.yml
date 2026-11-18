@@ -39,7 +39,7 @@ body:
     id: version
     attributes:
       label: Schwiftyy version
-      description: Contents of ~/.claude/schwiftyy/VERSION
+      description: "npm install: contents of ~/.claude/schwiftyy/VERSION. Plugin: shown in /plugin."
   - type: input
     id: env
     attributes:

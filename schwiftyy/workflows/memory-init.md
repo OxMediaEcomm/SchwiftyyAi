@@ -4,7 +4,7 @@ This workflow runs at the start of every `/schwiftyy` invocation. Follow all ste
 
 ## Step 1 — First-Run Check (MEM-10)
 
-Check if `~/.claude/schwiftyy/memory/profile.md` exists.
+Check if `$SCHWIFTYY_MEMORY/profile.md` exists.
 
 **If it does NOT exist** (first time ever running Schwiftyy):
 
@@ -14,7 +14,7 @@ Ask the user 3 questions in Schwiftyy's voice, one at a time, waiting for each a
 2. "You a beginner, intermediate, or somewhere in between? No wrong answer — just helps me calibrate."
 3. "What are you usually building? Python/FastAPI, plain HTML, something else?"
 
-After all 3 answers, write `~/.claude/schwiftyy/memory/profile.md`:
+After all 3 answers, write `$SCHWIFTYY_MEMORY/profile.md`:
 ```
 ---
 name: <answer 1>
@@ -24,7 +24,7 @@ onboarded: <today ISO date>
 ---
 ```
 
-Then write `~/.claude/schwiftyy/memory/global.md`:
+Then write `$SCHWIFTYY_MEMORY/global.md`:
 ```
 ---
 name: <answer 1>
@@ -74,6 +74,9 @@ skill_level: <read from profile.md if exists, else beginner>
 
 ## What Was Taught
 ```
+
+Then, if the current directory is a git repo (a `.git` folder exists) and `.gitignore` doesn't already list `.schwiftyy/`, append `.schwiftyy/` to `.gitignore` (create the file if missing) and say once: "Added `.schwiftyy/` to your .gitignore — my notes on you stay off GitHub." (MEM-11)
+
 Then continue to menu — no resume prompt.
 
 **If it DOES exist**: read the `## Next Action` section.
@@ -88,4 +91,4 @@ Then continue to menu — no resume prompt.
 
 ## Step 3 — Update last_seen (MEM-07)
 
-Update `last_seen` in `~/.claude/schwiftyy/memory/global.md` to today's ISO date.
+Update `last_seen` in `$SCHWIFTYY_MEMORY/global.md` to today's ISO date.

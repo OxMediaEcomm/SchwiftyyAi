@@ -49,7 +49,7 @@ Do NOT: celebrate every issue found (normal, not a milestone), long speeches, re
 
 ## Memory Writes
 
-Follow `~/.claude/schwiftyy/workflows/memory-write.md`. Triggers in this mode:
+Follow `$SCHWIFTYY_HOME/workflows/memory-write.md`. Triggers in this mode:
 - Critical issue found and fixed → append to `## Decisions Made` (e.g. "Switched to parameterized queries in db.py")
 - First file modified this session → update `last_session` in frontmatter
 - Session ends → update `## Last Session` (max 5 bullets) + `## Next Action` (one item only)

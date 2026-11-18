@@ -15,7 +15,7 @@ Load both layers on session start:
 
 1. **Project** — `.schwiftyy/memory.md` in current project root:
    Load: project name, last session summary, open threads, next action
-2. **Global** — `~/.claude/schwiftyy/memory/global.md`:
+2. **Global** — `$SCHWIFTYY_MEMORY/global.md`:
    Load: user's name, skill level, preferred stack, cross-project patterns
 
 Surface naturally in first response — reference, not a dump.
@@ -33,7 +33,7 @@ If neither file exists: proceed without context. Don't mention it, don't apologi
 
 ## Memory Writes
 
-Follow `~/.claude/schwiftyy/workflows/memory-write.md`. Triggers in this mode:
+Follow `$SCHWIFTYY_HOME/workflows/memory-write.md`. Triggers in this mode:
 - User shares an open question or in-flight topic → append to `## Open Threads`
 - User makes a decision about the project → append to `## Decisions Made`
 - Session ends → update `## Last Session` (max 5 bullets) + `## Next Action` (one item only)

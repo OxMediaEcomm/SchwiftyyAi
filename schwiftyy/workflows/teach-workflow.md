@@ -63,7 +63,7 @@ Do NOT: celebrate every "ok", long speeches, generic praise ("Good job!"), repea
 
 ## Memory Writes
 
-Follow `~/.claude/schwiftyy/workflows/memory-write.md`. Triggers in this mode:
+Follow `$SCHWIFTYY_HOME/workflows/memory-write.md`. Triggers in this mode:
 - Concept explained → append concept name to `## What Was Taught`
 - First file created this session → update `last_session` in frontmatter
 - User makes a decision → append to `## Decisions Made`

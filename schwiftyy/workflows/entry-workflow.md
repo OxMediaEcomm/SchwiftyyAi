@@ -6,7 +6,7 @@ Runs after memory-init.md completes on every /schwiftyy invocation.
 
 Run via Bash:
 ```bash
-node ~/.claude/commands/schwiftyy/schwiftyy-animation.js
+node "$SCHWIFTYY_HOME/portal.js"
 ```
 The script prints the opening line — do not repeat it.
 

@@ -1,0 +1,17 @@
+{
+  "name": "schwiftyy",
+  "owner": {
+    "name": "Diyon Clark",
+    "url": "https://github.com/OxMediaEcomm"
+  },
+  "metadata": {
+    "description": "Schwiftyy, the vibe-coding companion from Dimension C-420"
+  },
+  "plugins": [
+    {
+      "name": "schwiftyy",
+      "source": "./",
+      "description": "A Rick & Morty-flavored vibe-coding companion: builds with you, explains every move, remembers where you left off, and roasts the slop."
+    }
+  ]
+}

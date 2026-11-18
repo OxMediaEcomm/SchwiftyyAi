@@ -1,21 +1,21 @@
 {
   "name": "schwiftyy-cc",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A Rick & Morty-style AI companion for Claude Code that teaches vibe coders while building alongside them",
   "license": "MIT",
-  "main": "bin/install.js",
+  "main": "installer/install.js",
   "bin": {
-    "schwiftyy-cc": "bin/install.js"
+    "schwiftyy-cc": "installer/install.js"
   },
   "files": [
-    "bin/",
+    "installer/",
     "commands/",
-    "agents/",
-    "rules/",
     "schwiftyy/"
   ],
   "scripts": {
-    "prepublishOnly": "node bin/install.js --dry-run"
+    "check": "node scripts/check.js",
+    "build:modelfile": "node scripts/build-modelfile.js",
+    "prepublishOnly": "node scripts/check.js"
   },
   "engines": {
     "node": ">=18.0.0"

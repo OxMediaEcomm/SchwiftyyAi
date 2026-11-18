@@ -1,6 +1,6 @@
 {
   "name": "schwiftyy-cc",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A Rick & Morty-style AI companion for Claude Code that teaches vibe coders while building alongside them",
   "license": "MIT",
   "main": "bin/install.js",
@@ -25,10 +25,19 @@
     "claude",
     "ai",
     "vibe-coding",
-    "skill"
+    "skill",
+    "claude-code-skill",
+    "slash-commands",
+    "ai-tutor",
+    "learn-to-code"
   ],
+  "author": "Diyon Clark <diyon@oxmedia.digital>",
+  "homepage": "https://github.com/OxMediaEcomm/SchwiftyyAi#readme",
+  "bugs": {
+    "url": "https://github.com/OxMediaEcomm/SchwiftyyAi/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/schwiftyy/schwiftyy-cc"
+    "url": "git+https://github.com/OxMediaEcomm/SchwiftyyAi.git"
   }
 }

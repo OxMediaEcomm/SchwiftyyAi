@@ -2,7 +2,7 @@
 
 All notable changes to Schwiftyy. Format loosely follows [Keep a Changelog](https://keepachangelog.com).
 
-## [Unreleased]
+## [0.3.0] - 2026-11-20
 
 Schwiftyy finally sounds like a burned-out interdimensional genius instead of a hype bro.
 

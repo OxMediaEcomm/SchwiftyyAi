@@ -160,7 +160,7 @@ Portal animation should be designed for 40-char width minimum so it works in spl
 ### Recommended Architecture
 
 ```
-D:/Schwiftyy Ai/schwiftyy/
+<repo>/
 ├── schwiftyy.md                  ← Claude Code slash command (prompt only)
 └── bin/
     ├── schwiftyy-animation.js    ← Main animation (Node.js, no deps if possible)
@@ -171,7 +171,7 @@ The markdown skill file:
 
 ```markdown
 Run the Schwiftyy portal animation by executing:
-`node "D:/Schwiftyy Ai/schwiftyy/bin/schwiftyy-animation.js"`
+`node "<repo>/bin/schwiftyy-animation.js"`
 
 After the animation completes, respond as Schwiftyy — a chill Rick & Morty
 weed leaf character who helps with $ARGUMENTS. Stay in character.

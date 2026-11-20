@@ -77,7 +77,7 @@ metrics:
 ## Human Checkpoint
 
 Type "approved" after running:
-1. `node "D:/Schwiftyy Ai/schwiftyy/commands/schwiftyy/schwiftyy-animation.js"` in a real TTY — confirm green portal animation (~1.3s), Schwiftyy character in yellow, opening line correct
+1. `node "<repo>/commands/schwiftyy/schwiftyy-animation.js"` in a real TTY — confirm green portal animation (~1.3s), Schwiftyy character in yellow, opening line correct
 2. Narrow terminal to ~40 cols and rerun — confirm no line wrapping
 3. Open commands/schwiftyy/schwiftyy.md — confirm menu block and routing text
 

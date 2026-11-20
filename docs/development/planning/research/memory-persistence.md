@@ -19,12 +19,12 @@ Claude Code automatically reads and injects CLAUDE.md files at startup:
 | Project | `<project-root>/CLAUDE.md` | Project-specific overrides |
 | Subdirectory | `<subdir>/CLAUDE.md` | Narrowed context for that folder |
 
-Files can use `@path/to/other.md` to import other files (seen in `~/.claude-ultron/CLAUDE.md` → `@D:/Schwiftyy Ai/ultron/CLAUDE.md`). This gives you composable, modular config.
+Files can use `@path/to/other.md` to import other files (seen in `~/.claude-<account>/CLAUDE.md` → `@<workspace>/ultron/CLAUDE.md`). This gives you composable, modular config.
 
-### Auto-memory system (~/.claude-ultron/projects/)
+### Auto-memory system (~/.claude-<account>/projects/)
 
 The Ultron layer implements a cross-project memory store at:
-`~/.claude-ultron/projects/<encoded-path>/memory/`
+`~/.claude-<account>/projects/<encoded-path>/memory/`
 
 Structure observed:
 ```
@@ -177,7 +177,7 @@ Free-form markdown with "how to apply" section. Written at key milestones. Loade
 | **Memory bloat** | File grows unbounded, Claude reads irrelevant history | Hard size limits (GSD: STATE.md < 100 lines). Archive old decisions to separate file. Keep active memory = recent + relevant only. |
 | **Missing update** | Session ends abruptly, memory not written | Write memory incrementally (after each phase/milestone), not just at session end. |
 | **Conflicting memories** | Per-project and global contradict each other | Explicit priority rule: per-project > global. Global is defaults, project overrides. |
-| **Path encoding issues** | File paths with spaces/special chars break discovery | Use encoded slugs for directory names (e.g., `C--Users-OxGames` pattern from Ultron). |
+| **Path encoding issues** | File paths with spaces/special chars break discovery | Use encoded slugs for directory names (e.g., `C--Users-<you>` pattern from Ultron). |
 | **Context window waste** | Loading full memory file when only 10% is relevant | Structured sections + clear headers so Claude can skip-read. `<next_action>` always first. |
 | **Memory hallucination** | Claude "recalls" things not in the file | Memory is source of truth. If it's not written, it didn't happen. Teach this explicitly in skill prompts. |
 
@@ -243,9 +243,9 @@ Schwiftyy's `## What Was Taught` section enables continuity of pedagogy — don'
 
 ## Sources
 
-- Direct inspection: `~/.claude-ultron/projects/C--Users-OxGames/memory/` (live system)
+- Direct inspection: `~/.claude-<account>/projects/C--Users-<you>/memory/` (live system)
 - Direct inspection: `~/.claude/get-shit-done/templates/state.md` (GSD STATE template)
 - Direct inspection: `~/.claude/get-shit-done/templates/continue-here.md` (GSD handoff template)
 - Direct inspection: `~/.claude/get-shit-done/templates/user-profile.md` (GSD user profile template)
-- Direct inspection: `~/.claude-ultron/CLAUDE.md` + rules (global config injection patterns)
+- Direct inspection: `~/.claude-<account>/CLAUDE.md` + rules (global config injection patterns)
 - Project memory: `project_fdw_b2b.md`, `project_schwiftyy.md` (real-world memory examples)

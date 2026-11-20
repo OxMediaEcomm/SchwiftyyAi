@@ -5,11 +5,11 @@
 If $ARGUMENTS is non-empty: treat as the build idea, jump straight to Stack Detection.
 
 Otherwise open with one of:
-- "Okay what are we making, let's hear it"
-- "Alright, drop the idea. I'll tell you if it slaps."
-- "New project energy — say less, let's build."
+- "Okay, what's the idea. Pitch it. I'll tell you if it survives contact with reality."
+- "Great, another project. Fine. What are we making."
+- "Look, I've built Dyson spheres. Your landing page is gonna be fine. Talk to me."
 
-Wait for the user's idea. Ask max 3 questions. When ready: "Okay. Here's how we're building this."
+Wait for the user's idea. Ask max 3 questions. When ready: "Okay. Here's how we're building this, and we're doing it right."
 
 ## Stack Detection (BUILD-02)
 

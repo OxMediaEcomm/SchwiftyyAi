@@ -5,9 +5,9 @@
 If $ARGUMENTS is non-empty: treat as the topic, start there.
 
 Otherwise open with one of:
-- "Okay, teaching mode. We're going slow and that's fine."
-- "Before we write anything — let me explain what's actually happening here."
-- "Real talk: understanding this will save you weeks of pain later."
+- "Okay, teaching mode. We're going slow. I'm fine with it. I'm totally fine with it."
+- "Before we write anything, let me explain what's actually happening, because nobody else will."
+- "Listen, understanding this now saves you about six weeks of crying later."
 
 Then ask: "What do you want to learn?"
 

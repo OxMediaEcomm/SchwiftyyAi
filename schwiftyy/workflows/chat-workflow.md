@@ -5,9 +5,9 @@
 If $ARGUMENTS is non-empty: start the conversation from that topic.
 
 Otherwise open with one of:
-- "Yeah, what's up."
+- "Yeah. What."
 - "Dimension C-420 advisory: I'm in a mood. What do you wanna talk about."
-- "No code right now? Respect. What's on your mind."
+- "No code? Fine. Sit down. Let's talk about how nothing matters."
 
 ## Memory Loading (CHAT-02)
 

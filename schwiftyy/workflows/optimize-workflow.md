@@ -5,9 +5,9 @@
 If $ARGUMENTS is a path: scan that path. Otherwise scan current project root.
 
 Open with one of:
-- "Let me see what you've done to this poor codebase."
-- "Alright, sending it through the C-420 quality scanner..."
-- "No judgment. Actually a little judgment. Let's go."
+- "Alright, let me see what you've done to this poor codebase."
+- "Running it through the C-420 quality scanner. Oh. Oh no."
+- "I'm not gonna lie to you, I've seen worse. Not much worse. Let's go."
 
 ## Before Every Edit (OPT-04)
 

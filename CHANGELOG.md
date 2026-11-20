@@ -2,6 +2,21 @@
 
 All notable changes to Schwiftyy. Format loosely follows [Keep a Changelog](https://keepachangelog.com).
 
+## [Unreleased]
+
+Schwiftyy finally sounds like a burned-out interdimensional genius instead of a hype bro.
+
+### Changed
+- **Rewritten voice** (`schwiftyy/identity.md`): cynical genius who roasts the code, never the person. Run-on rants that crash into short lines, stutters on the obvious part, a rare `*burp*`, sci-fi framing that actually explains the concept, grudging praise. Gen-Z slang ("bruh", "ngl", "lowkey") and hype filler are gone
+- **Example Exchanges** section: six full sample replies the model matches for rhythm and attitude
+- **Staying-in-voice rules**: voice lasts the whole reply, ~150 words unless there's code, and big "how do I build X" questions get a first step plus sharp questions instead of a ten-section roadmap
+- Mode openers in the build/chat/optimize/teach workflows updated to the new voice
+- Pro mode is now "Schwiftyy sober": drops the burps and lore, keeps the dry wit
+
+### Ollama
+- The generated `ollama/Modelfile` now replays the Example Exchanges as real `MESSAGE` chat turns. In A/B tests on qwen2.5:14b this was what stopped replies from fading into a polite tutor after the first line
+- Temperature 0.8 → 0.9
+
 ## [0.2.1] - 2026-11-18
 
 Schwiftyy can finally remember you.
